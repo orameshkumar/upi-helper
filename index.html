@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#6366f1" />
+  <meta name="description" content="Manage UPI IDs, bills and reports" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="UPI Helper" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <title>UPI Helper</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-icon">₹</div>
+    <div>
+      <h1 id="pageTitle">Merchants</h1>
+      <p id="pageSubtitle">Manage UPI merchant details</p>
+    </div>
+  </header>
+
+  <!-- ═══════════════ MERCHANTS PAGE ═══════════════ -->
+  <main id="pageMerchants" class="page active">
+
+    <div id="installBanner" class="install-banner" style="display:none">
+      <p>📲 Install UPI Helper to your home screen</p>
+      <button id="installBtn" class="btn-install">Install</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">UPI Details</div>
+      <div class="field">
+        <label for="upiId">UPI ID *</label>
+        <input id="upiId" type="text" placeholder="e.g. merchant@upi" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="merchantCode">Merchant Code</label>
+        <input id="merchantCode" type="text" placeholder="e.g. MER001" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="merchantName">Merchant Name *</label>
+        <input id="merchantName" type="text" placeholder="e.g. Raj Store" autocomplete="off" />
+      </div>
+      <div class="btn-row">
+        <button id="saveBtn" class="btn-save">💾 Save</button>
+        <button id="editBtn" class="btn-edit">✏️ Edit</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="entries-header">
+        <span class="card-title" style="margin-bottom:0">Saved Merchants</span>
+        <span id="countBadge" class="badge">0</span>
+      </div>
+      <div id="entryList" class="entry-list"></div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════ BILL PAGE ═══════════════ -->
+  <main id="pageBill" class="page">
+
+    <div class="card">
+      <div class="card-title">Select Merchant</div>
+      <select id="billMerchant" class="select-input">
+        <option value="">— choose a merchant —</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Quick Add Numbers</div>
+      <textarea id="quickNums" class="textarea-input" rows="3"
+        placeholder="Enter numbers separated by space or comma&#10;e.g. 120, 85 250 40"></textarea>
+      <button id="calcBtn" class="btn-calc">🧮 Calculate &amp; Fill Amount</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Bill Amount</div>
+      <div class="amount-row">
+        <span class="rupee-sym">₹</span>
+        <input id="billAmount" type="number" min="0" step="0.01" placeholder="0.00" class="amount-input" />
+      </div>
+      <div class="bill-date-row">
+        <label for="billDate">Date</label>
+        <input id="billDate" type="date" class="date-input" />
+      </div>
+      <div class="btn-row" style="margin-top:14px">
+        <button id="generateQR" class="btn-qr" style="width:100%">📱 Generate QR &amp; Save</button>
+      </div>
+    </div>
+
+    <!-- QR + Save confirmation -->
+    <div id="qrCard" class="card qr-card" style="display:none">
+      <div class="card-title">UPI QR Code</div>
+      <div class="qr-meta" id="qrMeta"></div>
+      <div id="qrCanvas"></div>
+      <p class="qr-hint">Scan with any UPI app to pay</p>
+      <div class="qr-save-row">
+        <button id="saveAsPaid" class="btn-paid">✅ Save as Paid</button>
+        <button id="saveAsOpen" class="btn-open">🕐 Save as Open</button>
+      </div>
+      <button id="discardBill" class="btn-discard">✖ Discard</button>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════ REPORT PAGE ═══════════════ -->
+  <main id="pageReport" class="page">
+
+    <div class="card">
+      <div class="card-title">Date Range</div>
+      <div class="date-range-row">
+        <div class="field" style="flex:1;margin-bottom:0">
+          <label for="fromDate">From</label>
+          <input id="fromDate" type="date" class="date-input" />
+        </div>
+        <div class="field" style="flex:1;margin-bottom:0">
+          <label for="toDate">To</label>
+          <input id="toDate" type="date" class="date-input" />
+        </div>
+      </div>
+      <!-- Status filter tabs -->
+      <div class="status-tabs">
+        <button class="stab active" data-status="all">All</button>
+        <button class="stab" data-status="open">Open</button>
+        <button class="stab" data-status="paid">Paid</button>
+      </div>
+      <button id="filterBtn" class="btn-edit" style="margin-top:10px;width:100%">🔍 Filter</button>
+    </div>
+
+    <div class="card" id="reportSummaryCard" style="display:none">
+      <div class="summary-row">
+        <div class="summary-stat">
+          <span class="stat-label">Transactions</span>
+          <span class="stat-val" id="statCount">0</span>
+        </div>
+        <div class="summary-stat">
+          <span class="stat-label">Open</span>
+          <span class="stat-val warn" id="statOpen">₹0</span>
+        </div>
+        <div class="summary-stat">
+          <span class="stat-label">Paid</span>
+          <span class="stat-val accent" id="statPaid">₹0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="reportListCard" style="display:none">
+      <div class="entries-header">
+        <span class="card-title" style="margin-bottom:0">Transactions</span>
+        <div class="report-actions">
+          <label class="check-label">
+            <input type="checkbox" id="selectAll" /> All
+          </label>
+          <button id="deleteSelected" class="btn-danger-sm">🗑 Delete</button>
+        </div>
+      </div>
+      <div id="reportList" class="entry-list"></div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════ QR MODAL (report) ═══════════════ -->
+  <div id="qrModal" class="modal-overlay" style="display:none">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="card-title" style="margin-bottom:0">UPI QR Code</span>
+        <button id="closeModal" class="modal-close">✖</button>
+      </div>
+      <div class="qr-meta" id="modalQrMeta"></div>
+      <div id="modalQrCanvas"></div>
+      <p class="qr-hint">Scan with any UPI app to pay</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════ BOTTOM NAV ═══════════════ -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="pageMerchants">
+      <span class="nav-icon">🏪</span><span>Merchants</span>
+    </button>
+    <button class="nav-btn" data-page="pageBill">
+      <span class="nav-icon">🧾</span><span>Bill</span>
+    </button>
+    <button class="nav-btn" data-page="pageReport">
+      <span class="nav-icon">📊</span><span>Report</span>
+    </button>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
