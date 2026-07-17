@@ -343,6 +343,12 @@ button:active { transform: scale(0.97); }
 .modal-close { background: none; border: none; color: var(--text-muted); font-size: 1rem; cursor: pointer; padding: 3px 7px; border-radius: 6px; }
 .modal-close:hover { background: var(--surface2); color: var(--danger); }
 
+/* ── Share URL text ── */
+.share-url-text {
+  font-size: 0.72rem; color: var(--text-muted);
+  word-break: break-all; margin-top: 6px; line-height: 1.5;
+}
+
 /* ── Install banner ── */
 .install-banner { background: linear-gradient(135deg,#312e81,#4338ca); border: 1px solid #6366f1; border-radius: var(--radius); padding: 11px 13px; display: flex; align-items: center; gap: 10px; }
 .install-banner p { font-size: 0.8rem; flex: 1; color: #fff; }

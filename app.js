@@ -414,6 +414,39 @@ closeModalBtn.addEventListener('click', () => { qrModal.style.display = 'none'; 
 qrModal.addEventListener('click', e => { if (e.target === qrModal) qrModal.style.display = 'none'; });
 
 /* ════════════════════════════════════════════
+   SHARE APP QR
+═══════════════════════════════════════════════ */
+const shareBtn        = document.getElementById('shareBtn');
+const shareModal      = document.getElementById('shareModal');
+const closeShareModal = document.getElementById('closeShareModal');
+const shareQrCanvas   = document.getElementById('shareQrCanvas');
+const shareUrlText    = document.getElementById('shareUrl');
+const copyUrlBtn      = document.getElementById('copyUrlBtn');
+
+const APP_URL = 'https://orameshkumar.github.io/upi-helper';
+
+shareBtn.addEventListener('click', () => {
+  shareQrCanvas.innerHTML = '';
+  new QRCode(shareQrCanvas, {
+    text: APP_URL, width: 220, height: 220,
+    colorDark: '#000000', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M,
+  });
+  shareUrlText.textContent = APP_URL;
+  shareModal.style.display = 'flex';
+});
+
+closeShareModal.addEventListener('click', () => { shareModal.style.display = 'none'; });
+shareModal.addEventListener('click', e => { if (e.target === shareModal) shareModal.style.display = 'none'; });
+
+copyUrlBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(APP_URL).then(() => {
+    copyUrlBtn.textContent = '✅ Copied!';
+    setTimeout(() => { copyUrlBtn.textContent = '📋 Copy Link'; }, 2000);
+  });
+});
+
+/* ════════════════════════════════════════════
    PWA INSTALL — let browser show native prompt
 ═══════════════════════════════════════════════ */
 window.addEventListener('appinstalled', () => {
