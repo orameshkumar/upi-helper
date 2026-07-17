@@ -430,7 +430,7 @@ document.getElementById('installBtn').addEventListener('click', async () => {
   deferredPrompt = null;
 });
 
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 
 /* ── Init ── */
 setFormEnabled(false);

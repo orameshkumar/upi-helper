@@ -9,10 +9,24 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="UPI Helper" />
+  <base href="/upi-helper/" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <title>UPI Helper</title>
+  <script>
+    // Handle redirect from 404.html
+    (function(){
+      var q = window.location.search;
+      if (q && q.indexOf('?p=') === 0) {
+        window.history.replaceState(null, null,
+          window.location.pathname +
+          (q.slice(3) ? '/' + q.slice(3).replace(/~and~/g,'&') : '') +
+          window.location.hash
+        );
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
