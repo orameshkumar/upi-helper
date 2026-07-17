@@ -9,7 +9,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="UPI Helper" />
-  <base href="/upi-helper/" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
@@ -28,16 +27,48 @@
     })();
   </script>
   <link rel="stylesheet" href="style.css" />
+  <script>
+    // Apply saved theme before paint to avoid flash
+    (function(){ document.documentElement.setAttribute('data-theme', localStorage.getItem('upi_theme') || 'dark'); })();
+  </script>
 </head>
 <body>
 
   <header>
     <div class="header-icon">₹</div>
-    <div>
+    <div class="header-text">
       <h1 id="pageTitle">Merchants</h1>
       <p id="pageSubtitle">Manage UPI merchant details</p>
     </div>
+    <button id="themeBtn" class="theme-toggle-btn" title="Change theme">🎨</button>
   </header>
+
+  <!-- Theme picker panel -->
+  <div id="themePanel" class="theme-panel" style="display:none">
+    <div class="theme-panel-title">Choose Theme</div>
+    <div class="theme-swatches">
+      <button class="swatch" data-theme="dark"   title="Dark">
+        <span class="swatch-dot" style="background:linear-gradient(135deg,#0f172a,#1e293b)"></span>
+        <span>Dark</span>
+      </button>
+      <button class="swatch" data-theme="light"  title="Light">
+        <span class="swatch-dot" style="background:linear-gradient(135deg,#f1f5f9,#ffffff)"></span>
+        <span>Light</span>
+      </button>
+      <button class="swatch" data-theme="ocean"  title="Ocean">
+        <span class="swatch-dot" style="background:linear-gradient(135deg,#0a1628,#0ea5e9)"></span>
+        <span>Ocean</span>
+      </button>
+      <button class="swatch" data-theme="forest" title="Forest">
+        <span class="swatch-dot" style="background:linear-gradient(135deg,#071a0a,#4ade80)"></span>
+        <span>Forest</span>
+      </button>
+      <button class="swatch" data-theme="sunset" title="Sunset">
+        <span class="swatch-dot" style="background:linear-gradient(135deg,#1a0a00,#fb923c)"></span>
+        <span>Sunset</span>
+      </button>
+    </div>
+  </div>
 
   <!-- ═══════════════ MERCHANTS PAGE ═══════════════ -->
   <main id="pageMerchants" class="page active">

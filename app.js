@@ -430,7 +430,43 @@ document.getElementById('installBtn').addEventListener('click', async () => {
   deferredPrompt = null;
 });
 
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+if ('serviceWorker' in navigator) {
+  const swScope = location.pathname.includes('/upi-helper/') ? '/upi-helper/' : '/';
+  navigator.serviceWorker.register('./sw.js', { scope: swScope }).catch(() => {});
+}
+
+/* ════════════════════════════════════════════
+   THEME SWITCHER
+═══════════════════════════════════════════════ */
+const themeBtn   = document.getElementById('themeBtn');
+const themePanel = document.getElementById('themePanel');
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('upi_theme', t);
+  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === t));
+}
+
+themeBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  themePanel.style.display = themePanel.style.display === 'none' ? 'block' : 'none';
+});
+
+document.querySelectorAll('.swatch').forEach(s => {
+  s.addEventListener('click', () => {
+    applyTheme(s.dataset.theme);
+    themePanel.style.display = 'none';
+  });
+});
+
+document.addEventListener('click', e => {
+  if (!themePanel.contains(e.target) && e.target !== themeBtn) {
+    themePanel.style.display = 'none';
+  }
+});
+
+// Mark active swatch on load
+applyTheme(localStorage.getItem('upi_theme') || 'dark');
 
 /* ── Init ── */
 setFormEnabled(false);
