@@ -61,9 +61,10 @@ function setFormEnabled(enabled) {
 
 function clearForm() {
   upiInput.value = codeInput.value = nameInput.value = '';
-  setFormEnabled(false);
+  setFormEnabled(true);   // always enable for new entry
   editingId = null;
   saveBtn.disabled = false;
+  editBtn.disabled = true;
   editBtn.textContent = '✏️ Edit';
   document.querySelectorAll('.entry-item').forEach(el => el.classList.remove('active'));
 }
@@ -105,8 +106,9 @@ function loadMerchant(id) {
   upiInput.value  = m.upi;
   codeInput.value = m.code;
   nameInput.value = m.name;
-  setFormEnabled(false);
+  setFormEnabled(false);   // read-only until Edit clicked
   saveBtn.disabled = true;
+  editBtn.disabled = false;
   editBtn.textContent = '✏️ Edit';
   renderMerchants();
 }
@@ -467,5 +469,5 @@ document.addEventListener('click', e => {
 applyTheme(localStorage.getItem('upi_theme') || 'dark');
 
 /* ── Init ── */
-setFormEnabled(false);
+clearForm();   // sets inputs enabled, buttons in correct state
 renderMerchants();
