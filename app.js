@@ -5,7 +5,6 @@ const KEY_BILLS     = 'upi_bills';
 let merchants = JSON.parse(localStorage.getItem(KEY_MERCHANTS) || '[]');
 let bills     = JSON.parse(localStorage.getItem(KEY_BILLS)     || '[]');
 let editingId = null;
-let deferredPrompt = null;
 let pendingBill = null;       // bill waiting for Paid / Open confirmation
 let reportStatusFilter = 'all';
 
@@ -415,19 +414,10 @@ closeModalBtn.addEventListener('click', () => { qrModal.style.display = 'none'; 
 qrModal.addEventListener('click', e => { if (e.target === qrModal) qrModal.style.display = 'none'; });
 
 /* ════════════════════════════════════════════
-   PWA INSTALL
+   PWA INSTALL — let browser show native prompt
 ═══════════════════════════════════════════════ */
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBanner').style.display = 'flex';
-});
-document.getElementById('installBtn').addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  if (outcome === 'accepted') document.getElementById('installBanner').style.display = 'none';
-  deferredPrompt = null;
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').style.display = 'none';
 });
 
 if ('serviceWorker' in navigator) {
