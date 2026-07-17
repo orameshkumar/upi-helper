@@ -263,9 +263,7 @@ document.querySelectorAll('.stab').forEach(tab => {
 function resetReport() {
   reportSummaryCard.style.display = 'none';
   reportListCard.style.display    = 'none';
-  const now = new Date();
-  const y = now.getFullYear(), m = String(now.getMonth() + 1).padStart(2, '0');
-  fromDateInput.value = `${y}-${m}-01`;
+  fromDateInput.value = todayStr();
   toDateInput.value   = todayStr();
 }
 
